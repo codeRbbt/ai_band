@@ -2,7 +2,9 @@ from pathlib import Path
 
 import pytest
 
+from ghostician.audio_engine import GuitarAudioStream
 from ghostician.comp_generator import generate_backing_tracks
+from ghostician.comp_rules import JazzCompEngine
 from ghostician.realtime_engine import build_chord_messages, build_kick_snare_messages
 from ghostician.transcriber import transcribe_guitar
 from ghostician.watcher import GuitarAudioHandler
@@ -53,3 +55,12 @@ def test_realtime_engine_builds_jazz_chord_and_drum_messages():
     drum_messages = build_kick_snare_messages()
     assert [msg.note for msg in drum_messages] == [36, 51]
     assert all(msg.channel == 9 for msg in drum_messages)
+
+
+def test_guitar_audio_stream_and_jazz_comp_engine_api_exist():
+    stream = GuitarAudioStream(sample_rate=44100, buffer_size=512, callback_fn=lambda pitch: None)
+    assert stream.sample_rate == 44100
+    assert stream.buffer_size == 512
+
+    assert JazzCompEngine.get_piano_shell(60) == [60, 64, 70]
+    assert JazzCompEngine.get_drum_triggers() == [36, 51]

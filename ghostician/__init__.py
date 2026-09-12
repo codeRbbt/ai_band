@@ -1,6 +1,8 @@
 """Ghostician: a real-time AI accompanist for guitar."""
 
+from .audio_engine import GuitarAudioStream
 from .comp_generator import generate_backing_tracks
+from .comp_rules import JazzCompEngine
 from .engine import Ghostician
 from .features import AudioFeatures, analyze_frame
 from .realtime_engine import build_chord_messages, build_kick_snare_messages
@@ -11,6 +13,8 @@ __all__ = [
     "AudioFeatures",
     "Ghostician",
     "GuitarAudioHandler",
+    "GuitarAudioStream",
+    "JazzCompEngine",
     "analyze_frame",
     "build_chord_messages",
     "build_kick_snare_messages",
