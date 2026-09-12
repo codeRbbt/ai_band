@@ -9,7 +9,7 @@ import mido
 
 
 class RealTimeMidiBand:
-    def __init__(self, port_name: str = "IAC Driver Bus 1", midi_out=None):
+    def __init__(self, port_name: str = "ai_band Bus 1", midi_out=None):
         self.port_name = port_name
         self.midi_out = midi_out if midi_out is not None else self._open_output(port_name)
         self._events = Queue()
