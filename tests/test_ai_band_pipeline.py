@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from audio_stream import RealTimeGuitarStream
 from ghostician.audio_engine import GuitarAudioStream
 from ghostician.comp_generator import generate_backing_tracks
 from ghostician.comp_rules import JazzCompEngine
@@ -61,6 +62,10 @@ def test_guitar_audio_stream_and_jazz_comp_engine_api_exist():
     stream = GuitarAudioStream(sample_rate=44100, buffer_size=512, callback_fn=lambda pitch: None)
     assert stream.sample_rate == 44100
     assert stream.buffer_size == 512
+
+    realtime = RealTimeGuitarStream(callback=lambda pitch: None, sample_rate=44100, buffer_size=512)
+    assert realtime.sample_rate == 44100
+    assert realtime.buffer_size == 512
 
     assert JazzCompEngine.get_piano_shell(60) == [60, 64, 70]
     assert JazzCompEngine.get_drum_triggers() == [36, 51]
