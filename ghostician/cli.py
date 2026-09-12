@@ -24,6 +24,7 @@ def main() -> None:
     parser.add_argument("--midi-port", help="Mido output port name")
     parser.add_argument("--soundfont", help="SoundFont path for direct FluidSynth output")
     parser.add_argument("--list-midi", action="store_true", help="list available MIDI output ports")
+    parser.add_argument("--realtime", action="store_true", help="emit a simple live MIDI comp shell using the realtime helper layer")
     args = parser.parse_args()
     band = parse_band_request(args.band) if args.band else None
     if args.list_midi:
@@ -39,6 +40,16 @@ def main() -> None:
         render_seconds = band.duration if band else args.seconds
         destination = render_background_band(args.render_demo, render_seconds, band=band)
         print(f"Rendered {render_seconds:.1f}s background band to {destination}")
+        return
+    if args.realtime:
+        from .realtime_engine import build_chord_messages, build_kick_snare_messages
+
+        print("[Real-time AI] demo chord messages:")
+        for message in build_chord_messages(60):
+            print(message)
+        print("[Real-time AI] demo drum messages:")
+        for message in build_kick_snare_messages():
+            print(message)
         return
     if args.live:
         _run_live(args.device, args.seconds, args.midi_port, args.soundfont)

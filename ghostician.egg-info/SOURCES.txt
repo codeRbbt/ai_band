@@ -4,6 +4,7 @@ ghostician/__init__.py
 ghostician/arranger.py
 ghostician/capture.py
 ghostician/cli.py
+ghostician/comp_generator.py
 ghostician/conductor.py
 ghostician/engine.py
 ghostician/features.py
@@ -11,6 +12,8 @@ ghostician/midi.py
 ghostician/render.py
 ghostician/skill.py
 ghostician/tension.py
+ghostician/transcriber.py
+ghostician/watcher.py
 ghostician.egg-info/PKG-INFO
 ghostician.egg-info/SOURCES.txt
 ghostician.egg-info/dependency_links.txt
@@ -25,4 +28,5 @@ ghostician/sound_engine/drum_sampler.py
 ghostician/sound_engine/synth_bass.py
 ghostician/sound_engine/synth_keys.py
 ghostician/sound_engine/voice.py
+tests/test_ai_band_pipeline.py
 tests/test_ghostician.py
