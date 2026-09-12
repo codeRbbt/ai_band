@@ -1,0 +1,104 @@
+Metadata-Version: 2.4
+Name: ghostician
+Version: 0.1.0
+Summary: A real-time AI accompanist for guitar, piano, bass, and drums.
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.26
+Requires-Dist: mido>=1.3
+Provides-Extra: audio
+Requires-Dist: pyaudio>=0.2.14; extra == "audio"
+Provides-Extra: fluidsynth
+Requires-Dist: pyfluidsynth>=1.3.3; extra == "fluidsynth"
+Provides-Extra: midi
+Requires-Dist: python-rtmidi>=1.5; extra == "midi"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+
+# Ghostician
+
+Ghostician is a real-time Python accompanist for guitar. It turns short audio
+frames into a compact musical state, maps that state to a 0-100 tension score,
+and schedules piano, bass, and drum MIDI events.
+
+## Quick start
+
+```bash
+source .venv/bin/activate
+python -m pip install -e .
+ghostician --demo
+```
+
+The demo runs the engine against synthetic guitar features and prints the MIDI
+events it would send. This keeps the musical core testable without an audio
+interface or a SoundFont.
+
+To create a playable background-band MVP:
+
+```bash
+ghostician --render-demo ghostician_demo.wav --seconds 24
+```
+
+The WAV contains a 92 BPM progression with bass, piano-like chord tones, kick,
+snare, hats, and a rising tension arc with fills near the end.
+
+Direct the band with natural language:
+
+```bash
+ghostician --band "3/4 jazz drums with upright bass in E minor in ii-v-i fashion 30 seconds" \
+	--render-demo ghostician_3-4_jazz.wav
+```
+
+The Band Director currently understands time signatures, key, tempo, duration,
+jazz/rock/blues drum styles, upright/electric bass, instrument selection, and
+Roman-numeral progressions such as `ii-v-i`.
+
+The live analysis boundary is also available when PyAudio and an input device
+are present:
+
+```bash
+python -m pip install -e '.[audio]'
+ghostician --live --seconds 30
+```
+
+Use `ghostician --live --device 2` to select a specific Focusrite input.
+
+To hear the generated parts through a MIDI device:
+
+```bash
+python -m pip install -e '.[audio,midi]'
+ghostician --list-midi
+ghostician --live --device 2 --midi-port 'Your MIDI Port' --seconds 30
+```
+
+Or render directly through FluidSynth and a SoundFont:
+
+```bash
+python -m pip install -e '.[audio,fluidsynth]'
+ghostician --live --device 2 --soundfont /path/to/GeneralUserGS.sf2 --seconds 30
+```
+
+Each generated note receives a scheduled note-off, preventing stuck notes.
+
+## Live audio dependencies
+
+Install the optional native audio packages when your Python version supports
+their wheels:
+
+```bash
+python -m pip install -e '.[audio,midi,fluidsynth]'
+```
+
+The first live integration target is a Focusrite input through PyAudio, with a
+MIDI output port selected by name. FluidSynth itself must also be installed on
+macOS, for example with `brew install fluidsynth`.
+
+## Project shape
+
+- `ghostician/features.py`: RMS, zero-crossing pitch estimate, density, and register.
+- `ghostician/tension.py`: normalized tension score.
+- `ghostician/arranger.py`: piano, bass, and drum decisions.
+- `ghostician/midi.py`: MIDI event model and optional Mido output adapter.
+- `ghostician/engine.py`: the real-time orchestration boundary.
+- `ghostician/sound_engine/`: native keys, bass, and drums synthesis.
+- `ghostician/mixer/`: stem volume, pan, mute/solo, compression, delay, and reverb.

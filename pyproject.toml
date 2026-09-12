@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ghostician"
+version = "0.1.0"
+description = "A real-time AI accompanist for guitar, piano, bass, and drums."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "mido>=1.3",
+]
+
+[project.optional-dependencies]
+audio = [
+    "pyaudio>=0.2.14",
+]
+fluidsynth = [
+    "pyfluidsynth>=1.3.3",
+]
+midi = [
+    "python-rtmidi>=1.5",
+]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+ghostician = "ghostician.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ghostician*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
